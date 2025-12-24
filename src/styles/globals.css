@@ -1,0 +1,222 @@
+@import url("https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&display=swap");
+
+@import "tailwindcss";
+/* @import "tailwindcss" source("../../src/"); // only scan in src */
+@import "tailwindcss";
+@import "tw-animate-css";
+
+@custom-variant dark (&:is(.dark *));
+
+@theme {
+    --font-sans:
+        var(--font-sans), ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji",
+        "Segoe UI Symbol", "Noto Color Emoji";
+
+    --font-serif: var(--font-serif), ui-serif, Georgia, Cambria, "Times New Roman", Times, serif;
+
+    --font-instrument: "Instrument Serif", serif;
+}
+
+@layer components {
+    .noisy-dark-bg {
+        background-color: #0d0d0d; /* Dark gray color */
+        position: relative; /* Crucial: To anchor the absolute ::before pseudo-element */
+        overflow: hidden; /* Optional: to ensure noise doesn't bleed out of rounded corners */
+
+        /* Your pseudo-element logic for the noise layer */
+        &::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+
+            /* Your custom SVG-based noise background */
+            background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100%25' height='100%25'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='turbulence' baseFrequency='0.1' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.5'/%3E%3C/svg%3E");
+
+            /* Blend the noise with the dark background */
+            mix-blend-mode: overlay; /* or soft-light, multiply */
+
+            pointer-events: none;
+            z-index: 1; /* Keep it above the main background, but below content */
+        }
+    }
+
+    .card {
+        /* transition:
+            box-shadow 0.3s ease,
+            transform 0.3s ease;
+
+        &:hover {
+            @apply shadow-md;
+            transform: translateY(-4px);
+        } */
+
+        /* data-img = {...} */
+    }
+}
+
+@theme inline {
+    --radius-sm: calc(var(--radius) - 4px);
+    --radius-md: calc(var(--radius) - 2px);
+    --radius-lg: var(--radius);
+    --radius-xl: calc(var(--radius) + 4px);
+    --color-background: var(--background);
+    --color-foreground: var(--foreground);
+    --color-card: var(--card);
+    --color-card-foreground: var(--card-foreground);
+    --color-popover: var(--popover);
+    --color-popover-foreground: var(--popover-foreground);
+    --color-primary: var(--primary);
+    --color-primary-foreground: var(--primary-foreground);
+    --color-primary-subtle: var(--primary-subtle);
+    --color-secondary: var(--secondary);
+    --color-secondary-subtle: var(--secondary-subtle);
+    --color-secondary-foreground: var(--secondary-foreground);
+    --color-secondary-hover: var(--secondary-hover);
+    --color-muted: var(--muted);
+    --color-muted-foreground: var(--muted-foreground);
+    --color-accent: var(--accent);
+    --color-accent-foreground: var(--accent-foreground);
+    --color-destructive: var(--destructive);
+    --color-border: var(--border);
+    --color-input: var(--input);
+    --color-ring: var(--ring);
+    --color-chart-1: var(--chart-1);
+    --color-chart-2: var(--chart-2);
+    --color-chart-3: var(--chart-3);
+    --color-chart-4: var(--chart-4);
+    --color-chart-5: var(--chart-5);
+    --color-sidebar: var(--sidebar);
+    --color-sidebar-foreground: var(--sidebar-foreground);
+    --color-sidebar-primary: var(--sidebar-primary);
+    --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+    --color-sidebar-accent: var(--sidebar-accent);
+    --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+    --color-sidebar-border: var(--sidebar-border);
+    --color-sidebar-ring: var(--sidebar-ring);
+
+    --inset-shadow-sm: inset 0 0 0 1px var(--color-secondary);
+    --inset-shadow-md: inset 0 0 0 3px var(--color-secondary);
+    --inset-shadow-lg: inset 0 0 0 8px var(--color-secondary);
+}
+
+:root {
+    --brand-green: oklch(0.4523 0.0936 149.22);
+    --brand-green-dark: oklch(0.4005 0.081 151.71);
+    --brand-green-bg: oklch(0.9526 0.1055 132.18);
+    --brand-green-bg-subtle: oklch(0.849 0.1178 138.08);
+
+    --radius: 0.625rem;
+    /* --background: oklch(1 0 0); */
+    --background: oklch(0.9761 0 0);
+    /* --background: var(--brand-green-bg); */
+    --foreground: oklch(0.145 0 0);
+    --card: oklch(1 0 0);
+    --card-foreground: oklch(0.145 0 0);
+    --popover: oklch(1 0 0);
+    --popover-foreground: oklch(0.145 0 0);
+    --primary: oklch(0.205 0 0);
+    --primary-foreground: oklch(0.985 0 0);
+    --primary-subtle: var(--brand-green-bg-subtle);
+    --secondary: var(--brand-green);
+    --secondary-foreground: oklch(1 0 0);
+    --secondary-subtle: var(--brand-green-bg);
+    --secondary-hover: var(--brand-green-dark);
+    --muted: oklch(0.97 0 0);
+    --muted-foreground: oklch(0.556 0 0);
+    --accent: oklch(0.97 0 0);
+    --accent-foreground: oklch(0.205 0 0);
+    --destructive: oklch(0.577 0.245 27.325);
+    --border: var(--brand-green);
+    --input: var(--border);
+    --ring: oklch(0.708 0 0);
+    --chart-1: oklch(0.646 0.222 41.116);
+    --chart-2: oklch(0.6 0.118 184.704);
+    --chart-3: oklch(0.398 0.07 227.392);
+    --chart-4: oklch(0.828 0.189 84.429);
+    --chart-5: oklch(0.769 0.188 70.08);
+    --sidebar: var(--background);
+    --sidebar-foreground: oklch(0.145 0 0);
+    --sidebar-primary: oklch(0.205 0 0);
+    --sidebar-primary-foreground: oklch(0.985 0 0);
+    --sidebar-accent: oklch(0.97 0 0);
+    --sidebar-accent-foreground: oklch(0.205 0 0);
+    --sidebar-border: oklch(0.922 0 0);
+    --sidebar-ring: oklch(0.708 0 0);
+}
+
+.dark {
+    --background: oklch(0.145 0 0);
+    --foreground: oklch(0.985 0 0);
+    --card: oklch(0.205 0 0);
+    --card-foreground: oklch(0.985 0 0);
+    --popover: oklch(0.205 0 0);
+    --popover-foreground: oklch(0.985 0 0);
+    --primary: oklch(0.922 0 0);
+    --primary-foreground: oklch(0.205 0 0);
+    /* todo */
+    --primary-subtle: oklch(0.269 0 0);
+    --secondary: oklch(0.269 0 0);
+    --secondary-foreground: oklch(0.985 0 0);
+    /* todo */
+    --secondary-hover: oklch(0.269 0 0);
+    --secondary-subtle: oklch(0.349 0 0);
+    --muted: oklch(0.269 0 0);
+    --muted-foreground: oklch(0.708 0 0);
+    --accent: oklch(0.269 0 0);
+    --accent-foreground: oklch(0.985 0 0);
+    --destructive: oklch(0.704 0.191 22.216);
+    --border: var(--brand-green);
+    --input: oklch(1 0 0 / 15%);
+    --ring: oklch(0.556 0 0);
+    --chart-1: oklch(0.488 0.243 264.376);
+    --chart-2: oklch(0.696 0.17 162.48);
+    --chart-3: oklch(0.769 0.188 70.08);
+    --chart-4: oklch(0.627 0.265 303.9);
+    --chart-5: oklch(0.645 0.246 16.439);
+    --sidebar: oklch(0.205 0 0);
+    --sidebar-foreground: oklch(0.985 0 0);
+    --sidebar-primary: oklch(0.488 0.243 264.376);
+    --sidebar-primary-foreground: oklch(0.985 0 0);
+    --sidebar-accent: oklch(0.269 0 0);
+    --sidebar-accent-foreground: oklch(0.985 0 0);
+    --sidebar-border: oklch(1 0 0 / 10%);
+    --sidebar-ring: oklch(0.556 0 0);
+}
+
+@layer base {
+    * {
+        @apply border-border outline-ring/50;
+    }
+    body {
+        @apply bg-background text-foreground;
+    }
+}
+
+/* cookie consent banner overrides */
+#cc-main {
+    --cc-font-family: var(--font-sans);
+    --cc-btn-primary-bg: var(--brand-green);
+    --cc-btn-primary-border-color: var(--border);
+    --cc-btn-primary-hover-bg: var(--secondary);
+    --cc-btn-primary-hover-border-color: var(--secondary);
+    --cc-toggle-on-bg: var(--cc-btn-primary-bg);
+    --cc-btn-border-radius: var(--radius-xl);
+}
+
+@keyframes ripple-effect {
+    0%,
+    100% {
+        transform: translate(-50%, -50%) scale(1);
+    }
+
+    50% {
+        transform: translate(-50%, -50%) scale(0.9);
+    }
+}
+
+.animate-ripple-circle {
+    animation: ripple-effect 2s ease-in-out infinite;
+}
