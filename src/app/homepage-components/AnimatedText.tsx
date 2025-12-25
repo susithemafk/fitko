@@ -60,13 +60,13 @@ export const AnimatedText = ({ words }: { words: string[] }) => {
             {/* Current word (animating out) */}
             <span
                 key={`out-${index}`}
-                className="word-span col-start-1 row-start-1 inline-block font-serif font-bold italic text-9xl">
+                className="word-span col-start-1 row-start-1 inline-block font-serif font-bold italic text-5xl sm:text-5xl md:text-7xl lg:text-9xl">
                 {words[index]}
             </span>
             {/* Next word (animating in) */}
             <span
                 key={`in-${nextIndex}`}
-                className="word-span col-start-1 row-start-1 inline-block font-serif font-bold italic text-9xl opacity-0">
+                className="word-span col-start-1 row-start-1 inline-block font-serif font-bold italic text-5xl sm:text-5xl md:text-7xl lg:text-9xl opacity-0">
                 {words[nextIndex]}
             </span>
         </span>
