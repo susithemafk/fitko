@@ -89,7 +89,7 @@ poté už můžeš spustit aplikaci přes `pnpm dev`
 ## změma ve schématu databáze
 
 1. změň schéma v `prisma/schema.prisma`
-2. v CMD run `pnpm run db:migrate:create`
+2. v CMD run `pnpm run db:generate`
 
 ## protected routes
 
