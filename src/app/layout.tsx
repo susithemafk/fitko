@@ -24,7 +24,7 @@ const playfair = Playfair_Display({
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
     return (
-        <html lang="en" className={`${syne.variable} ${playfair.variable}`}>
+        <html lang="en" className={`dark ${syne.variable} ${playfair.variable}`}>
             <body>
                 <TRPCReactProvider>{children}</TRPCReactProvider>
                 <Toaster />

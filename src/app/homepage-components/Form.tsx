@@ -38,11 +38,8 @@ const Form = () => {
     const form = useForm<FormSchemaValues>({
         resolver: zodResolver(formSchema),
         defaultValues,
+        shouldUnregister: false,
     })
-
-    useEffect(() => {
-        form.reset(defaultValues)
-    }, [form.reset])
 
     const submitSurvey = api.survey.submit.useMutation({
         onSuccess: () => {
@@ -73,8 +70,10 @@ const Form = () => {
     const [currentMachineIndex, setCurrentMachineIndex] = useState(0)
     const [isFinished, setIsFinished] = useState(false)
 
-    const onSliderDragEnd = (value: number[]) => {
-        console.log("Slider drag ended with value:", value)
+    const onSliderDragEnd = (value: number[], machineId: string) => {
+        console.log(`Slider drag ended for ${machineId} with value:`, value)
+        form.setValue(machineId as any, value[0], { shouldDirty: true, shouldTouch: true })
+
         if (currentMachineIndex < machines.length - 1) {
             setCurrentMachineIndex((prev) => prev + 1)
         } else {
@@ -89,6 +88,7 @@ const Form = () => {
     const goBack = () => {
         if (isFinished) {
             setIsFinished(false)
+            setCurrentMachineIndex((prev) => prev - 1)
         } else if (currentMachineIndex > 0) {
             setCurrentMachineIndex((prev) => prev - 1)
         }
@@ -100,32 +100,39 @@ const Form = () => {
     const sliderContainerRef = useRef<HTMLDivElement>(null)
     const timelineRef = useRef<gsap.core.Timeline | null>(null)
 
-    useGSAP(() => {
-        if (machineContainerRef.current) {
-            gsap.fromTo(
-                machineContainerRef.current,
-                { opacity: 0, x: 20 },
-                { opacity: 1, x: 0, duration: 0.5, ease: "power2.out" }
-            )
-        }
+    useGSAP(
+        () => {
+            // Kill any existing animations on these elements to prevent stacking
+            gsap.killTweensOf(machineContainerRef.current)
+            gsap.killTweensOf(sliderContainerRef.current)
 
-        if (sliderContainerRef.current) {
-            const tl = gsap.timeline({ repeat: -1, repeatDelay: 1.5 })
-            timelineRef.current = tl
+            if (machineContainerRef.current) {
+                gsap.fromTo(
+                    machineContainerRef.current,
+                    { opacity: 0, x: 20 },
+                    { opacity: 1, x: 0, duration: 0.5, ease: "power2.out" }
+                )
+            }
 
-            tl.to(sliderContainerRef.current, {
-                scale: 1.05,
-                rotation: -6,
-                duration: 0.25,
-                ease: "power2.out",
-            }).to(sliderContainerRef.current, {
-                scale: 1,
-                rotation: -8,
-                duration: 0.25,
-                ease: "power2.in",
-            })
-        }
-    }, [currentMachineIndex])
+            if (sliderContainerRef.current) {
+                const tl = gsap.timeline({ repeat: -1, repeatDelay: 2 })
+                timelineRef.current = tl
+
+                tl.to(sliderContainerRef.current, {
+                    scale: 1.1,
+                    rotation: -6,
+                    duration: 0.2,
+                    ease: "power2.out",
+                }).to(sliderContainerRef.current, {
+                    scale: 1,
+                    rotation: -8,
+                    duration: 0.2,
+                    ease: "power2.in",
+                })
+            }
+        },
+        { dependencies: [currentMachineIndex], scope: machineContainerRef }
+    )
 
     return (
         <UIForm {...form}>
@@ -165,13 +172,13 @@ const Form = () => {
                                             <ToggleGroupItem
                                                 value={"private" satisfies FormSchemaPrivateOrPublic}
                                                 aria-label="private"
-                                                className="data-[state=on]:bg-primary data-[state=on]:text-white">
+                                                className="data-[state=on]:bg-primary data-[state=on]:text-black">
                                                 private
                                             </ToggleGroupItem>
                                             <ToggleGroupItem
                                                 value={"public" satisfies FormSchemaPrivateOrPublic}
                                                 aria-label="public"
-                                                className="data-[state=on]:bg-primary data-[state=on]:text-white">
+                                                className="data-[state=on]:bg-primary data-[state=on]:text-black">
                                                 public
                                             </ToggleGroupItem>
                                         </ToggleGroup>
@@ -224,29 +231,36 @@ const Form = () => {
 
                             <div
                                 ref={sliderContainerRef}
-                                onMouseEnter={() => timelineRef.current?.pause()}
+                                onMouseEnter={() => {
+                                    timelineRef.current?.pause()
+                                    gsap.to(sliderContainerRef.current, { scale: 1, rotation: -8, duration: 0.3 })
+                                }}
                                 onMouseLeave={() => timelineRef.current?.play()}
                                 onPointerDown={() => timelineRef.current?.pause()}
-                                className="w-46 lg:w-64 px-4 py-5 bg-white rounded-full absolute bottom-8 right-8 -rotate-8">
-                                <FormField
-                                    control={form.control}
-                                    name={currentMachine.id}
-                                    render={({ field: { value, onChange } }) => (
-                                        <FormItem>
-                                            <FormControl>
-                                                <Slider
-                                                    min={0}
-                                                    max={100}
-                                                    step={1}
-                                                    value={[value ?? 0]}
-                                                    onValueChange={(vals) => onChange(vals[0])}
-                                                    onValueCommit={onSliderDragEnd}
-                                                />
-                                            </FormControl>
-                                            <FormMessage />
-                                        </FormItem>
-                                    )}
-                                />
+                                className="w-46 lg:w-64 px-4 py-5 bg-card rounded-full absolute bottom-8 right-8 -rotate-8">
+                                {machines.map((machine, index) => (
+                                    <div key={machine.id} className={index === currentMachineIndex ? "block" : "hidden"}>
+                                        <FormField
+                                            control={form.control}
+                                            name={machine.id}
+                                            render={({ field: { value, onChange } }) => (
+                                                <FormItem>
+                                                    <FormControl>
+                                                        <Slider
+                                                            min={0}
+                                                            max={100}
+                                                            step={1}
+                                                            value={[value ?? 30]}
+                                                            onValueChange={(vals) => onChange(vals[0])}
+                                                            onValueCommit={(vals) => onSliderDragEnd(vals, machine.id)}
+                                                        />
+                                                    </FormControl>
+                                                    <FormMessage />
+                                                </FormItem>
+                                            )}
+                                        />
+                                    </div>
+                                ))}
                             </div>
                         </div>
                         <p className="text-2xl font-semibold mb-4 text-center">{currentMachine.label}</p>

@@ -10,7 +10,7 @@ export default async function Home() {
 
     return (
         <HydrateClient>
-            <header>header</header>
+            <header></header>
             <main className="">
                 <section id="hero" className="mb-8">
                     <Hero />
@@ -22,7 +22,7 @@ export default async function Home() {
                     <Form />
                 </section>
             </main>
-            <footer>footer</footer>
+            <footer></footer>
         </HydrateClient>
     )
 }
