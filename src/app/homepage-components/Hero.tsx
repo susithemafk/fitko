@@ -1,8 +1,16 @@
 import { AnimatedText } from "./AnimatedText"
 
+const backgroundImagePath = "/hero/hero.jpg"
+
 const Hero = () => {
     return (
-        <div className="outline outline-green-500 flex flex-col px-4 md:px-8 xl:px-0 xl:max-w-7xl mx-auto gap-12 overflow-x-hidden">
+        <div
+            className="outline outline-green-500 flex flex-col px-4 md:px-8 xl:px-0 xl:max-w-7xl mx-auto gap-12 overflow-x-hidden"
+            style={{
+                backgroundImage: `url(${backgroundImagePath})`,
+                backgroundSize: "cover",
+                backgroundPosition: "center",
+            }}>
             <div className="outline outline-red-500 min-h-[70svh] w-full h-full flex-1 flex flex-col justify-end">
                 <h1 className="mt-48">
                     <AnimatedText words={["tvé", "připravujeme"]} />

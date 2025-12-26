@@ -68,14 +68,18 @@ poté zadej random email a odeslat, v konzoli se zobrazí INSERT do databáze a 
 
 ## random příkazy
 
-zobrazení běžících kontejnerů - `docker ps` `docker container ls` celý container s databází smazat -
-`docker stop spolubydlime-postgres` `docker rm spolubydlime-postgres` zjištění env proměnných v databázi -
-`docker inspect spolubydlime-postgres | grep -i env -A 10` update prisma database schema: `npx prisma db push` pokud
-nejsou inicializovaný tabulky, tak je musíme provést migraci `npx prisma migrate dev --name init` pro zobrazení všech
-migrací použij `npx prisma migrate status` pro pull prisma migrací po pullu z Gitu dej `npx prisma migrate dev` drop all
-data from database and seed it `npx prisma migrate reset` just seed the db `npx prisma db seed` pro zobrazení databáze
-se buď připoj přes svoje IDE např. DBeaver nebo přes Prisma Studio, které spustíš přes `npx prisma studio` změna eol pro
-linux `sed -i 's/\r$//' start-database.sh`
+- zobrazení běžících kontejnerů - `docker ps` `docker container ls`
+- celý container s databází smazat - `docker stop spolubydlime-postgres` `docker rm spolubydlime-postgres`
+- zjištění env proměnných v databázi - `docker inspect spolubydlime-postgres | grep -i env -A 10`
+- update prisma database schema: `npx prisma db push`
+- pokud nejsou inicializovaný tabulky, tak je musíme provést migraci `npx prisma migrate dev --name init`
+- pro zobrazení všech migrací použij `npx prisma migrate status`
+- pro pull prisma migrací po pullu z Gitu dej `npx prisma migrate dev`
+- drop all data from database and seed it `npx prisma migrate reset`
+- just seed the db `npx prisma db seed`
+- pro zobrazení databáze se buď připoj přes svoje IDE např. DBeaver nebo přes Prisma Studio, které spustíš přes
+  `npx prisma studio`
+- změna eol pro linux `sed -i 's/\r$//' start-database.sh`
 
 ## novej postup spuštění a sjednocení databáze
 

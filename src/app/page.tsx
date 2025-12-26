@@ -3,6 +3,7 @@ import { LatestPost } from "./_components/post"
 import { auth } from "~/server/auth"
 import Hero from "./homepage-components/Hero"
 import Videos from "./homepage-components/Videos"
+import Form from "./homepage-components/Form"
 
 export default async function Home() {
     const session = await auth()
@@ -14,8 +15,11 @@ export default async function Home() {
                 <section id="hero" className="mb-8">
                     <Hero />
                 </section>
-                <section id="videos">
+                <section id="videos" className="mb-12">
                     <Videos />
+                </section>
+                <section id="form" className="mb-16">
+                    <Form />
                 </section>
             </main>
             <footer>footer</footer>
